@@ -1,5 +1,7 @@
+import TodoListItem from './TodoListItem.jsx';
+
 function TodoList() {
-    //todos array moved from App.jsx
+    
     const todos = [
         {id: 1, title: "review resources"},
         {id: 2, title: "take notes"},
@@ -7,8 +9,10 @@ function TodoList() {
     ]
     
     return (  
-        <ul>
-            {todos.map(todo => <li key={todo.id}>{todo.title}</li>)}
+        <ul>            
+            {todos.map(todo => (
+                <TodoListItem key={todo.id} todo={todo} />
+            ))}
         </ul>
     )
 }
