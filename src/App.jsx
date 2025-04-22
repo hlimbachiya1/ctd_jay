@@ -1,23 +1,34 @@
-import './App.css' 
+import './App.css';
 import TodoList from './TodoList.jsx';
-import TodoForm from './TodoForm.jsx';  
-import { useState } from 'react'; 
+import TodoForm from './TodoForm.jsx';
+import { useState } from 'react';
 
 function App() {
-    const [todoList, setTodoList] = useState([]);
+  const [todoList, setTodoList] = useState([]);
 
-    const handleAddTodo = (newTodo) => {
-	setTodoList([...todoList, newTodo]);
-    };
+  const handleAddTodo = (newTodo) => {
+    const todoWithCompletion = { ...newTodo, isCompleted: false };
+    setTodoList([...todoList, todoWithCompletion]);
+  };
 
-    return (
-        <div>
-            <h1> My Todos</h1>
-            <TodoForm onAddTodo={handleAddTodo} />  {/* Pass the function */}
-            
-            <TodoList todoList={todoList}/>  {/* Pass todoList as prop */}
-        </div>
-    ) 
-}  
+  const completeTodo = (id) => {
+    const updatedTodos = todoList.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, isCompleted: true };
+      }
+      return todo;
+    });
+    setTodoList(updatedTodos);
+  };
 
-export default App
+  return (
+    <div>
+      <h1> My Todos</h1>
+      <TodoForm onAddTodo={handleAddTodo} /> {/* Pass the function */}
+      <TodoList todoList={todoList} onCompleteTodo={completeTodo} />{' '}
+      {/* Pass todoList as prop */}
+    </div>
+  );
+}
+
+export default App;
