@@ -10,26 +10,34 @@ function App() {
   const [isSaving, setIsSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const [sortField, setSortField] = useState("createdTime");
-  const [sortDirection, setSortDirection] = useState("desc");
+
+  const [sortField, setSortField] = useState("createdTime"); // Initial value should be "createdTime"
+  //const [sortField, setSortField] = useState("title"); // Start with title instead of createdTime
+  const [sortDirection, setSortDirection] = useState("desc"); // Initial value should be "desc"
   const [queryString, setQueryString] = useState("");
 
   const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
   const token = `Bearer ${import.meta.env.VITE_PAT}`;
 
   const encodeUrl = ({ sortField, sortDirection, queryString }) => {
+
     let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
     let searchQuery = "";
     
+    // if (sortField == "createdTime"){
+    //   sortQuery =  `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
+    // }
+
     if (queryString) {
       searchQuery = `&filterByFormula=SEARCH("${queryString}",+title)`;
     }
     
     return encodeURI(`${url}?${sortQuery}${searchQuery}`);
+
   };
 
   useEffect(() => {
-    const fetchTodos = async () => {
+      const fetchTodos = async () => {
       setIsLoading(true);
 
       const options = {
@@ -40,19 +48,17 @@ function App() {
       };
 
       try {
-        //const encodedUrl; // = encodeUrl({ sortField, sortDirection, queryString });
-        const resp = await fetch(encodeUrl({ sortDirection, sortField, queryString }),options);
+        const encodedUrl = encodeUrl({ sortField, sortDirection, queryString });
+        const resp = await fetch(encodedUrl, options);
         
-        //const resp = await fetch(url, options);
-        //const resp = await fetch(encodeUrl({ sortField, sortDirection, queryString }), options);
-        console.log("response:", resp);
-
         if (!resp.ok) {
-          throw new Error(resp.statusText || 'Failed to fetch todos');
+          const errorText = await resp.text();
+          console.error("Fetch error details:", errorText);
+          throw new Error(`${resp.statusText || 'Failed to fetch todos'}: ${errorText}`);
+          
         }
 
         const data = await resp.json();
-        console.log("data:", data);
         const fetchedTodos = data.records.map((record) => {
           const todo = {
             id: record.id,
@@ -79,14 +85,13 @@ function App() {
   }, [sortField, sortDirection, queryString]);
 
   const handleAddTodo = async (newTodo) => {
-    
     const payload = {
       records: [
         {
           fields: {
             title: newTodo.title,
             isCompleted: false,
-            //createdTime: new Date().toISOString()
+            createdTime: new Date().toISOString().split('T')[0]
           },
         },
       ],
@@ -103,14 +108,8 @@ function App() {
 
     try {
       setIsSaving(true);
-      //const encodedUrl = encodeUrl({ sortField, sortDirection, queryString });
       const encodedUrl = encodeUrl({ sortField, sortDirection, queryString });
-      
-      console.log("check send req.;", encodeUrl, payload);
-      console.log("check body/payload:", options.body);
-      
       const resp = await fetch(encodedUrl, options);
-      
 
       if (!resp.ok) {
         throw new Error(resp.statusText || 'Failed to save todo');
@@ -155,6 +154,7 @@ function App() {
           fields: {
             title: todoToComplete.title,
             isCompleted: true,
+            createdTime: todoToComplete.createdTime // Preserve the creation time
           },
         },
       ],
@@ -170,7 +170,8 @@ function App() {
     };
 
     try {
-      const resp = await fetch(encodeUrl, options);
+      const encodedUrl = encodeUrl({ sortField, sortDirection, queryString });
+      const resp = await fetch(encodedUrl, options);
 
       if (!resp.ok) {
         throw new Error(resp.statusText || 'Failed to complete todo');
@@ -189,6 +190,7 @@ function App() {
       setTodoList([...revertedTodos]);
     }
   };
+
 
   const updateTodo = async (editedTodo) => {
     const originalTodo = todoList.find((todo) => todo.id === editedTodo.id);
@@ -209,6 +211,7 @@ function App() {
           fields: {
             title: editedTodo.title,
             isCompleted: editedTodo.isCompleted,
+            createdTime: originalTodo.createdTime
           },
         },
       ],
@@ -224,7 +227,8 @@ function App() {
     };
 
     try {
-      const resp = await fetch(encodeUrl, options);
+      const encodedUrl = encodeUrl({ sortField, sortDirection, queryString });
+      const resp = await fetch(encodedUrl, options);
 
       if (!resp.ok) {
         throw new Error(resp.statusText || 'Failed to update todo');
@@ -256,7 +260,7 @@ function App() {
 
   return (
     <div>
-      <h1> My Todos</h1>
+      <h1>My Todos</h1>
       <TodoForm onAddTodo={handleAddTodo} isSaving={isSaving} />
       <TodoList
         todoList={todoList}
