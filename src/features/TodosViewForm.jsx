@@ -36,7 +36,8 @@ function TodosViewForm({
         />
         
         <button type="button" onClick={() => {
-          setLocalQueryString(''); setQueryString('');
+          setLocalQueryString(''); 
+          //////setQueryString('');
         }}>
           Clear
         </button>

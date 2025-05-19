@@ -34,7 +34,8 @@ function App() {
     
     return encodeURI(`${url}?${sortQuery}${searchQuery}`);
 
-  }, [url, sortField, sortDirection, queryString]);
+    }, [sortField, sortDirection, queryString]);
+  //////}, [url, sortField, sortDirection, queryString]);
 
   useEffect(() => {
       const fetchTodos = async () => {
@@ -83,7 +84,8 @@ function App() {
     };
 
     fetchTodos();
-  }, [sortField, sortDirection, queryString, encodeUrl]);
+  }, [sortField, sortDirection, queryString]); 
+  //////}, [sortField, sortDirection, queryString, encodeUrl]);
 
   const handleAddTodo = async (newTodo) => {
     const payload = {
@@ -92,7 +94,7 @@ function App() {
           fields: {
             title: newTodo.title,
             isCompleted: false,
-            createdTime: new Date().toISOString().split('T')[0]
+            //////createdTime: new Date().toISOString().split('T')[0]
           },
         },
       ],
@@ -156,7 +158,7 @@ function App() {
           fields: {
             title: todoToComplete.title,
             isCompleted: true,
-            createdTime: todoToComplete.createdTime // Preserve the creation time
+            //////createdTime: todoToComplete.createdTime // Preserve the creation time
           },
         },
       ],
@@ -214,7 +216,7 @@ function App() {
           fields: {
             title: editedTodo.title,
             isCompleted: editedTodo.isCompleted,
-            createdTime: originalTodo.createdTime
+            ////createdTime: originalTodo.createdTime
           },
         },
       ],
