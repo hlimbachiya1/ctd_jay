@@ -31,21 +31,14 @@ function TodosViewForm({
           type="text"
           value = {localQueryString}
           onChange = {(e)=> setLocalQueryString(e.target.value)}
-          //value={queryString}
-          //onChange={(e) => setQueryString(e.target.value)}
         />
         
         <button type="button" onClick={() => {
           setLocalQueryString(''); 
-          //////setQueryString('');
         }}>
           Clear
         </button>
 
-
-        {/* <button type="button" onClick={() => setQueryString('')}>
-          Clear
-        </button> */}
 
       </div>
 

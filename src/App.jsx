@@ -11,23 +11,17 @@ function App() {
   const [errorMessage, setErrorMessage] = useState('');
 
 
-  const [sortField, setSortField] = useState("createdTime"); // Initial value should be "createdTime"
-  //const [sortField, setSortField] = useState("title"); // Start with title instead of createdTime
-  const [sortDirection, setSortDirection] = useState("desc"); // Initial value should be "desc"
+  const [sortField, setSortField] = useState("createdTime"); 
+  const [sortDirection, setSortDirection] = useState("desc"); 
   const [queryString, setQueryString] = useState("");
 
   const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
   const token = `Bearer ${import.meta.env.VITE_PAT}`;
 
-  //const encodeUrl = ({ sortField, sortDirection, queryString }) => {
   const encodeUrl = useCallback(() => {
     let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
     let searchQuery = "";
     
-    // if (sortField == "createdTime"){
-    //   sortQuery =  `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
-    // }
-
     if (queryString) {
       searchQuery = `&filterByFormula=SEARCH("${queryString}",+title)`;
     }
@@ -35,7 +29,7 @@ function App() {
     return encodeURI(`${url}?${sortQuery}${searchQuery}`);
 
     }, [sortField, sortDirection, queryString]);
-  //////}, [url, sortField, sortDirection, queryString]);
+
 
   useEffect(() => {
       const fetchTodos = async () => {
@@ -50,7 +44,6 @@ function App() {
 
       try {
         const encodedUrl = encodeUrl();
-        //const encodedUrl = encodeUrl({ sortField, sortDirection, queryString });
         const resp = await fetch(encodedUrl, options);
         
         if (!resp.ok) {
@@ -85,8 +78,9 @@ function App() {
 
     fetchTodos();
   }, [sortField, sortDirection, queryString]); 
-  //////}, [sortField, sortDirection, queryString, encodeUrl]);
 
+
+  
   const handleAddTodo = async (newTodo) => {
     const payload = {
       records: [
@@ -94,7 +88,6 @@ function App() {
           fields: {
             title: newTodo.title,
             isCompleted: false,
-            //////createdTime: new Date().toISOString().split('T')[0]
           },
         },
       ],
@@ -112,7 +105,6 @@ function App() {
     try {
       setIsSaving(true);
       const encodedUrl = encodeUrl();
-      //const encodedUrl = encodeUrl({ sortField, sortDirection, queryString });
       const resp = await fetch(encodedUrl, options);
 
       if (!resp.ok) {
@@ -138,6 +130,7 @@ function App() {
     }
   };
 
+
   const completeTodo = async (id) => {
     const todoToComplete = todoList.find((todo) => todo.id === id);
     const originalTodo = { ...todoToComplete };
@@ -158,7 +151,6 @@ function App() {
           fields: {
             title: todoToComplete.title,
             isCompleted: true,
-            //////createdTime: todoToComplete.createdTime // Preserve the creation time
           },
         },
       ],
@@ -175,7 +167,6 @@ function App() {
 
     try {
       const encodedUrl = encodeUrl();
-      //const encodedUrl = encodeUrl({ sortField, sortDirection, queryString });
       const resp = await fetch(encodedUrl, options);
 
       if (!resp.ok) {
@@ -216,7 +207,6 @@ function App() {
           fields: {
             title: editedTodo.title,
             isCompleted: editedTodo.isCompleted,
-            ////createdTime: originalTodo.createdTime
           },
         },
       ],
@@ -233,7 +223,6 @@ function App() {
 
     try {
       const encodedUrl = encodeUrl();
-      //const encodedUrl = encodeUrl({ sortField, sortDirection, queryString });
       const resp = await fetch(encodedUrl, options);
 
       if (!resp.ok) {
