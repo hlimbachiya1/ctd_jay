@@ -1,0 +1,12 @@
+.todoList {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  width: 100%;
+}
+
+.emptyMessage, .loadingMessage {
+  font-style: italic;
+  color: #718096;
+  margin: 1rem 0;
+}
