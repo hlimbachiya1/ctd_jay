@@ -1,4 +1,5 @@
 import './App.css';
+import styles from './App.module.css';
 import TodoList from './features/TodoList/TodoList.jsx';
 import TodoForm from './features/TodoForm.jsx';
 import { useState, useEffect, useCallback } from 'react';
@@ -254,8 +255,11 @@ function App() {
   };
 
   return (
-    <div>
-      <h1>My Todos</h1>
+    <div className={styles.container}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
+       <img src="./todo-logo-svg.svg" alt="Todo Logo" width="50" height="50" style={{ marginRight: '1rem' }} />
+        <h1>My Todos</h1>
+      </div>
       <TodoForm onAddTodo={handleAddTodo} isSaving={isSaving} />
       <TodoList
         todoList={todoList}
@@ -275,9 +279,13 @@ function App() {
       />
 
       {errorMessage && (
-        <div>
+        <div className={styles.errorContainer}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <img src="./error-icon-svg.svg" alt="Error" width="24" height="24" style={{ marginRight: '0.5rem' }} />
           <hr />
           <p>{errorMessage}</p>
+          </div>
+          <hr/>
           <button onClick={() => setErrorMessage('')}>Dismiss</button>
         </div>
       )}
