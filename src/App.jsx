@@ -12,10 +12,6 @@ import {
 } from './reducers/todos.reducer.js';
 
 function App() {
-  // const [todoList, setTodoList] = useState([]);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [isSaving, setIsSaving] = useState(false);
-  // const [errorMessage, setErrorMessage] = useState('');
   const [todoState, dispatch] = useReducer(todosReducer, initialTodosState);
 
   const [sortField, setSortField] = useState('createdTime');
@@ -34,7 +30,7 @@ function App() {
     }
 
     return encodeURI(`${url}?${sortQuery}${searchQuery}`);
-  }, [sortField, sortDirection, queryString]);
+  }, [sortField, sortDirection, queryString, url]);
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -74,7 +70,8 @@ function App() {
     };
 
     fetchTodos();
-  }, [sortField, sortDirection, queryString]);
+  }, // [sortField, sortDirection, queryString]);
+     [encodeUrl]);
 
   const handleAddTodo = async (newTodo) => {
     const payload = {
@@ -170,6 +167,8 @@ function App() {
         type: todoActions.revertTodo,
         originalTodo: originalTodo,
       });
+    }finally {
+      dispatch({type: todoActions.endRequest});
     }
   };
 
@@ -212,7 +211,7 @@ function App() {
       }
     } catch (error) {
       console.error(error);
-      //setErrorMessage(`${error.message}. Reverting todo...`);
+
       dispatch({
         type: todoActions.setLoadError,
         error: error,
@@ -221,6 +220,8 @@ function App() {
         type: todoActions.revertTodo,
         originalTodo: originalTodo,
       });
+    } finally {
+      dispatch ({type: todoActions.endRequest});
     }
   };
 

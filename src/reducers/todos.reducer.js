@@ -40,7 +40,7 @@ function reducer(state = initialState, action) {
       });
       return {
         ...state,
-        todoList: fetchedTodos,
+        todoList: [...fetchedTodos],
         isLoading: false,
       };
     }
@@ -68,7 +68,7 @@ function reducer(state = initialState, action) {
       }
       return {
         ...state,
-        todoList: [...state.todoList, savedTodo],
+        todoList: [...state.todoList, {...savedTodo}],
       };
     }
 
@@ -82,13 +82,13 @@ function reducer(state = initialState, action) {
     case actions.updateTodo: {
       const updatedTodoList = state.todoList.map((todo) => {
         if (todo.id === action.editedTodo.id) {
-          return action.editedTodo;
+          return {...action.editedTodo};
         }
         return todo;
       });
       return {
         ...state,
-        todoList: updatedTodoList,
+        todoList: [...updatedTodoList],
       };
     }
 
@@ -101,20 +101,20 @@ function reducer(state = initialState, action) {
       });
       return {
         ...state,
-        todoList: completedTodoList,
+        todoList: [...completedTodoList],
       };
     }
 
     case actions.revertTodo: {
       const revertedTodos = state.todoList.map((todo) => {
         if (todo.id === action.originalTodo.id) {
-          return action.originalTodo;
+          return {...action.originalTodo};
         }
         return todo;
       });
       return {
         ...state,
-        todoList: revertedTodos,
+        todoList: [...revertedTodos],
       };
     }
     
