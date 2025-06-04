@@ -1,0 +1,38 @@
+.paginationControls {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.paginationControls button {
+  background-color: #f8f9fa;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.paginationControls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.paginationControls button:hover:not(:disabled) {
+  background-color: #e9ecef;
+}
+
+.paginationControls span {
+  font-weight: bold;
+  padding: 0 1rem;
+}
+
+.errorContainer {
+  margin-top: 2rem;
+  padding: 1rem;
+  border: 1px solid #dc3545;
+  border-radius: 4px;
+  background-color: #f1d2d5;
+}

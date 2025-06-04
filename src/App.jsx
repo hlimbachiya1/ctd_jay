@@ -1,9 +1,12 @@
 import './App.css';
 import styles from './App.module.css';
-import TodoList from './features/TodoList/TodoList.jsx';
-import TodoForm from './features/TodoForm.jsx';
 import { useState, useEffect, useCallback, useReducer } from 'react';
-import TodosViewForm from './features/TodosViewForm';
+import { Routes, Route, useLocation } from 'react-router';
+
+import Header from './shared/Header.jsx';
+import TodosPage from './pages/TodosPage.jsx';
+import About from './pages/About.jsx';
+import NotFound from './pages/NotFound.jsx';
 
 import {
   reducer as todosReducer,
@@ -18,8 +21,24 @@ function App() {
   const [sortDirection, setSortDirection] = useState('desc');
   const [queryString, setQueryString] = useState('');
 
+  const [title, setTitle] = useState('Todo List');
+  const location = useLocation();
+
   const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
   const token = `Bearer ${import.meta.env.VITE_PAT}`;
+
+  useEffect(() => {
+    switch (location.pathname) {
+      case '/':
+        setTitle('Todo List');
+        break;
+      case '/about':
+        setTitle('About');
+        break;
+      default:
+        setTitle('Not Found');
+    }
+  }, [location]);
 
   const encodeUrl = useCallback(() => {
     let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
@@ -70,8 +89,7 @@ function App() {
     };
 
     fetchTodos();
-  }, // [sortField, sortDirection, queryString]);
-     [encodeUrl]);
+  }, [encodeUrl]);
 
   const handleAddTodo = async (newTodo) => {
     const payload = {
@@ -167,8 +185,8 @@ function App() {
         type: todoActions.revertTodo,
         originalTodo: originalTodo,
       });
-    }finally {
-      dispatch({type: todoActions.endRequest});
+    } finally {
+      dispatch({ type: todoActions.endRequest });
     }
   };
 
@@ -221,66 +239,35 @@ function App() {
         originalTodo: originalTodo,
       });
     } finally {
-      dispatch ({type: todoActions.endRequest});
+      dispatch({ type: todoActions.endRequest });
     }
   };
 
   return (
     <div className={styles.container}>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: '1rem',
-        }}
-      >
-        <img
-          src="./todo-logo-svg.svg"
-          alt="Todo Logo"
-          width="50"
-          height="50"
-          style={{ marginRight: '1rem' }}
-        />
-        <h1>My Todos</h1>
-      </div>
-      <TodoForm onAddTodo={handleAddTodo} isSaving={todoState.isSaving} />
-      <TodoList
-        todoList={todoState.todoList}
-        onCompleteTodo={completeTodo}
-        onUpdateTodo={updateTodo}
-        isLoading={todoState.isLoading}
-      />
-
-      <hr />
-      <TodosViewForm
-        sortField={sortField}
-        setSortField={setSortField}
-        sortDirection={sortDirection}
-        setSortDirection={setSortDirection}
-        queryString={queryString}
-        setQueryString={setQueryString}
-      />
-
-      {todoState.errorMessage && (
-        <div className={styles.errorContainer}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <img
-              src="./error-icon-svg.svg"
-              alt="Error"
-              width="24"
-              height="24"
-              style={{ marginRight: '0.5rem' }}
+      <Header title={title} />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <TodosPage
+              todoState={todoState}
+              dispatch={dispatch}
+              handleAddTodo={handleAddTodo}
+              completeTodo={completeTodo}
+              updateTodo={updateTodo}
+              sortField={sortField}
+              setSortField={setSortField}
+              sortDirection={sortDirection}
+              setSortDirection={setSortDirection}
+              queryString={queryString}
+              setQueryString={setQueryString}
             />
-            <hr />
-            <p>{todoState.errorMessage}</p>
-          </div>
-          <hr />
-          <button onClick={() => dispatch({ type: todoActions.clearError })}>
-            Dismiss
-          </button>
-        </div>
-      )}
+          }
+        />
+        <Route path="/about" element={<About />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </div>
   );
 }
