@@ -1,0 +1,35 @@
+.aboutContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  line-height: 1.6;
+}
+
+.aboutContainer h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.aboutContainer h3 {
+  color: #555;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+.aboutContainer p {
+  margin-bottom: 1rem;
+  color: #666;
+}
+
+.aboutContainer ul {
+  margin-bottom: 1.5rem;
+  padding-left: 2rem;
+}
+
+.aboutContainer li {
+  margin-bottom: 0.5rem;
+  color: #666;
+}

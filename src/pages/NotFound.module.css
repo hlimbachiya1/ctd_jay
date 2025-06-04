@@ -1,0 +1,42 @@
+.notFoundContainer {
+  text-align: center;
+  padding: 4rem 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.errorCode {
+  font-size: 6rem;
+  font-weight: bold;
+  color: #dc3545;
+  margin: 0;
+  line-height: 1;
+}
+
+.errorMessage {
+  font-size: 2rem;
+  color: #333;
+  margin: 1rem 0;
+}
+
+.description {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 2rem 0;
+  line-height: 1.5;
+}
+
+.homeLink {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.homeLink:hover {
+  background-color: #0056b3;
+}
