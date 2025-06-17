@@ -1,0 +1,28 @@
+.title {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.nav {
+  top: 20px;
+  right: 20px;
+  position: fixed;
+  display: flex;
+  gap: 1rem;
+  z-index: 1000;
+}
+
+.inactive:hover {
+  text-decoration: underline;
+}
+
+.inactive {
+  color: #000;
+  text-decoration: none;
+}
+
+.active {
+  color: #666;
+  text-decoration: none;
+  font-weight: bold;
+}
