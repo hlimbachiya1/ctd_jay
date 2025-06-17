@@ -23,12 +23,17 @@ function TodosPage({
   const navigate = useNavigate();
 
   const itemsPerPage = 15;
-  const totalPages = Math.ceil(todoState.todoList.length / itemsPerPage);
+
+  const filteredTodos = todoState.todoList.filter((todo)=> !todo.isCompleted);
+
+  //const totalPages = Math.ceil(todoState.todoList.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredTodos.length / itemsPerPage);
   const currentPage = parseInt(SearchParams.get('page') || '1', 10);
   const indexOfFirstTodo = (currentPage - 1) * itemsPerPage;
 
   // this const is not mentioned in the assginment but i thought it is needed
-  const currentTodos = todoState.todoList.slice(
+  //const currentTodos = todoState.todoList.slice(
+  const currentTodos = filteredTodos.slice(
     indexOfFirstTodo,
     indexOfFirstTodo + itemsPerPage
   );
@@ -64,14 +69,13 @@ function TodosPage({
         isLoading={todoState.isLoading}
       />
 
-      {todoState.todoList.length > itemsPerPage && (
+      {filteredTodos.length > itemsPerPage && (
         <div className={styles.paginationControls}>
           <button onClick={handlePreviousPage} disabled={currentPage === 1}>
             Previous
           </button>
 
           <span>
-            {' '}
             Page {currentPage} of {totalPages}
           </span>
           <button
